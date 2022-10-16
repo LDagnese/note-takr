@@ -21,6 +21,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
+  req.body.id = notes.length.toString();
   const note = createNote(req.body);
   res.json(note);
 });
