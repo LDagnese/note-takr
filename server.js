@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const path = require("path");
 const notes = require("./db/db.json");
 
@@ -9,8 +10,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+const createNote = (note) => {
+  notes.push(note);
+  fs.writeFileSync(path.join(__dirname, "./db/db.json"), JSON.stringify(notes), null, 2);
+  return note;
+};
+
 app.get("/api/notes", (req, res) => {
   res.json(notes);
+});
+
+app.post("/api/notes", (req, res) => {
+  const note = createNote(req.body);
+  res.json(note);
 });
 
 app.get("/", (req, res) => {
